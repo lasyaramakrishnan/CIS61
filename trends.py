@@ -48,7 +48,7 @@ def tweet_time(tweet):
 def tweet_location(tweet):
     """Return a position representing a tweet's location."""
     "*** YOUR CODE HERE ***"
-    lat = tweet['longitude']
+    lat = tweet['latitude']
     lon = tweet['longitude']
     return make_position(lat,lon)
 
@@ -145,18 +145,12 @@ def make_sentiment(value):
     """
     assert value is None or (value >= -1 and value <= 1), 'Illegal value'
     "*** YOUR CODE HERE ***"
-    return [value] 
+    return value
 
 def has_sentiment(s):
     """Return whether sentiment s has a value."""
     "*** YOUR CODE HERE ***"
-    return s != None
-
-    #original sln:
-    # if s[0] is None: 
-        # return False
-     #else:
-        #return True
+    return s != None 
 
 def sentiment_value(s):
     """Return the value of a sentiment s."""
@@ -291,7 +285,7 @@ def find_state_center(polygons):
         lat_polygon = lat_polygon + find_centroid(polygons[i])[0] * find_centroid(polygons[i])[2]  
         lon_polygon = lon_polygon + find_centroid(polygons[i])[1] * find_centroid(polygons[i])[2]  
     lat_polygon, lon_polygon = lat_polygon / area_polygon, lon_polygon/area_polygon
-    return make_position(X_overall, Y_overall)
+    return make_position(lat_polygon, lon_polygon)
 
 
 ###################################
@@ -319,7 +313,23 @@ def group_tweets_by_state(tweets):
     """
     tweets_by_state = {}
     "*** YOUR CODE HERE ***"
+    for tweet in tweets: 
+        tweet_position = tweet_location(tweet)
+        total_distance = float("inf") 
+
+        for postal_code, shape in us_states.items():
+            state_position = find_state_center(shape)
+            distance_between = geo_distance(tweet_position, state_position)
+            if distance_between < total_distance:
+                closest_state = postal_code
+                total_distance = distance_between
+
+        if closest_state in tweets_by_state.keys():
+            tweets_by_state[closest_state].append(tweet)
+        else:
+            tweets_by_state[closest_state] = [tweet]
     return tweets_by_state
+
 
 def average_sentiments(tweets_by_state):
     """Calculate the average sentiment of the states by averaging over all
@@ -335,6 +345,17 @@ def average_sentiments(tweets_by_state):
     """
     averaged_state_sentiments = {}
     "*** YOUR CODE HERE ***"
+    for closest_state, tweets in tweets_by_state.items():
+        total_sentiment = float(0)
+        number_tweets = float(0)
+        for tweet in tweets:
+            sentiment = analyze_tweet_sentiment(tweet)
+            if has_sentiment(sentiment):
+                total_sentiment = total_sentiment + sentiment_value(sentiment)
+                number_tweets = number_tweets + 1
+            if number_tweets > 0:
+                average_sentiment = total_sentiment / number_tweets
+                averaged_state_sentiments[closest_state] = average_sentiment
     return averaged_state_sentiments
 
 
