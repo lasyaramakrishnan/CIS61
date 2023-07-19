@@ -1,4 +1,3 @@
-#QUESTION ONE
 def twenty_twenty_three():
     """Come up with the most creative expression that evaluates 
     to 2023,using only numbers and the +, *, and - operators.
@@ -17,7 +16,6 @@ def twenty_twenty_three():
     from operator import add, mul, sub, floordiv
     return add(mul(200, 10), add(floordiv(200, 10), add(2, 1)))
 
-#QUESTION 2
 from math import pi
 
 def sphere_area(r):
@@ -29,7 +27,6 @@ def sphere_volume(r):
     """ Volume of a sphere with radius r."""
     return ((4/3)* pi * r * r * r)
 
-#QUESTION 3
 def wears_jacket(temp, raining):
     """
     >>> wears_jacket(90, False)
@@ -41,7 +38,6 @@ def wears_jacket(temp, raining):
     """
     return temp < 60 or raining
 
-#QUESTION 4
 def sumNaturals(n):
     """ Sum all the first n natural numbers.
     >>> sumNaturals(3) # 1 + 2 + 3 = 6
