@@ -1,6 +1,6 @@
 """The ants module implements game logic for Ants Vs. SomeBees."""
 
-# Name: Serena Chou
+# Name: Lasya Ramakrishnan
 # Email:
 
 import random
