@@ -181,6 +181,8 @@ class ThrowerAnt(Ant):
     implemented = True
     damage = 1
     food_cost = 4
+    min_range = 0 
+    max_range = 10 
 
     def nearest_bee(self, hive):
         """Return the nearest Bee in a Place that is not the Hive, connected to
@@ -192,12 +194,13 @@ class ThrowerAnt(Ant):
         """
         "*** YOUR CODE HERE ***"
         current_place = self.place
+        distance = 0 
 
-        # Traverse the places by following their entrance attributes
         while current_place is not None:
-            if current_place is not hive and len(current_place.bees) > 0:
-                # Return a random Bee from the nearest place that contains bees
+            if current_place is not hive and len(current_place.bees) > 0 and self.min_range <= distance <= self.max_range:
                 return random.choice(current_place.bees)
+                
+            distance += 1 
             current_place = current_place.entrance
 
     def throw_at(self, target):
